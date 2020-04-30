@@ -9,7 +9,7 @@ def get_formatted_datetime(date_to_format: datetime) -> str:
     return date_to_format.strftime(datetime_format)
 
 
-def get_case_data(start, end=None):
+def get_case_data(start, end=None, country_or_region=None):
 
     end_range = end or datetime.today()
 
@@ -25,11 +25,14 @@ def get_case_data(start, end=None):
 
     all_data = pd.concat(objs=[all_data, data])
 
-    return all_data
+    if not country_or_region:
+        return all_data
+    else:
+        return all_data[all_data['Country_Region'] == country_or_region]
 
 
-test = get_case_data('04-20-2020', '04-21-2020')
+test = get_case_data('04-20-2020', '04-21-2020', 'US')
 
-print(test.head())
-print(test.Country_Region.value_counts)
-print(test.info())
+# print(test.head())
+print(test.groupby(['Province_State', 'Admin2'])['Confirmed'].sum())
+# print(test.info())
