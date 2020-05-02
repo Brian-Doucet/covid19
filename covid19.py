@@ -1,6 +1,4 @@
 from datetime import datetime
-
-import requests
 import pandas as pd
 
 from utils import get_valid_end_date, get_formatted_datetime
@@ -15,9 +13,9 @@ def get_case_data(start, end=None, country_or_region=None):
             start=start, end=end_range).to_pydatetime()]
     else:
         print(f'{end_range} is not a valid date!\n')
-        print('Please enter a date that less than or equal to yesterday')
+        print('Please enter a date that is less than or equal to yesterday ')
 
-    if len(list_of_dates) == 0:
+    if not list_of_dates:
         print('No dates to search. Enter valid dates')
     else:
         all_data = pd.DataFrame()
