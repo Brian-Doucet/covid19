@@ -30,7 +30,7 @@ def get_case_data(start, end=None, country_or_region=None):
         Last_Update     Date the most recent file was pushed to the project repo
                         (24 hour format, UTC).
         Lat and Long    Geographic centroids, not based on a specific address.
-         Confirmed       Confirmed cases (includes presumptive positive and 
+        Confirmed       Confirmed cases (includes presumptive positive and 
                         probable cases).
         Deaths          Number of deaths. US deaths include confirmed and probable.
         Recovered       Number of recovered cases. Recovered cases outside of China 
