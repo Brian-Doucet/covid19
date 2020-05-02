@@ -5,6 +5,40 @@ from utils import get_valid_end_date, get_formatted_datetime
 
 
 def get_case_data(start, end=None, country_or_region=None):
+    """Get global COVID-19 case reports from the Data Repository by the Center 
+    for Systems Science and Engineering at Johns Hopkins University.
+
+    Source: https://github.com/CSSEGISandData/COVID-19/tree/master/csse_covid_19_data
+
+    Arguments:
+        start {str} -- Date to begin searching for cases
+
+    Keyword Arguments:
+        end {str} -- Date to end search on, inclusive (default: {None})
+        country_or_region {str} -- Name of a country or region to filter results (default: {None})
+
+    Returns:
+        pd.DataFrame -- A pandas DataFrame
+
+        Data values include:
+        =============   ========================================================
+        FIPS            US only. Uniquely identifies counties within the USA
+        Admin2          County name. US only.
+        Province_State  Province, state or dependency name.
+        Country_Region  Country, region, or sovereignty name. Official designations 
+                        used by the U.S. Department of State.
+        Last_Update     Date the most recent file was pushed to the project repo
+                        (24 hour format, UTC).
+        Lat and Long    Geographic centroids, not based on a specific address.
+         Confirmed       Confirmed cases (includes presumptive positive and 
+                        probable cases).
+        Deaths          Number of deaths. US deaths include confirmed and probable.
+        Recovered       Number of recovered cases. Recovered cases outside of China 
+                        are based on estimates from local media, state and local
+                        reporting (when available).
+        Active          Derived; total confirmed - total recovered - total deaths
+        Combined        Derived; combination of [Province_State],[Country_Region].
+    """
 
     end_range = end or datetime.today()
 
@@ -32,4 +66,4 @@ def get_case_data(start, end=None, country_or_region=None):
 
 
 test = get_case_data('04-20-2020', '04-21-2020')
-print(test.head(5))
+print(test.to_csv('test_file.csv', index=False))
