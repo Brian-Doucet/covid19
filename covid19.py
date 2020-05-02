@@ -34,8 +34,4 @@ def get_case_data(start, end=None, country_or_region=None):
 
 
 test = get_case_data('04-20-2020', '04-20-2020')
-print(test)
-# print(test.Last_Update.unique())
-# print(test.head())
-#print(test.groupby(['Province_State', 'Admin2'])['Confirmed'].sum())
-# print(test.info())
+print(test.head(5))
