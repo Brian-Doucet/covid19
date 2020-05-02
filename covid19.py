@@ -31,5 +31,5 @@ def get_case_data(start, end=None, country_or_region=None):
             return all_data[all_data['Country_Region'] == country_or_region]
 
 
-test = get_case_data('04-20-2020', '04-20-2020')
+test = get_case_data('04-20-2020', '04-21-2020')
 print(test.head(5))
