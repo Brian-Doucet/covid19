@@ -1,5 +1,5 @@
 
-from datetime import datetime
+from datetime import datetime, timedelta
 import pytest
 import re
 import utils
@@ -20,3 +20,16 @@ def test_get_formatted_datetime_proper_format():
     sample_datetime = datetime.today()
     formatted_date = utils.get_formatted_datetime(sample_datetime)
     assert bool(pattern.match(formatted_date)) == True
+
+
+def test_get_valid_end_pass():
+    valid_date = '05-01-2020'
+    today = datetime.today().strftime('%m-%d-%Y')
+
+    assert bool(utils.get_valid_end_date(valid_date)) == True
+
+
+def test_get_valid_end_date_fail():
+    today = datetime.today().strftime('%m-%d-%Y')
+
+    assert bool(utils.get_valid_end_date(today)) == False
