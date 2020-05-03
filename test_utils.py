@@ -24,7 +24,6 @@ def test_get_formatted_datetime_proper_format():
 
 def test_get_valid_end_pass():
     valid_date = '05-01-2020'
-    today = datetime.today().strftime('%m-%d-%Y')
 
     assert bool(utils.get_valid_end_date(valid_date)) == True
 
