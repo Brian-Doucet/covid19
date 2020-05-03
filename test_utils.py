@@ -19,4 +19,4 @@ def test_get_formatted_datetime_proper_format():
     pattern = re.compile(r'(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])-([12]\d{3})')
     sample_datetime = datetime.today()
     formatted_date = utils.get_formatted_datetime(sample_datetime)
-    assert pattern.match(formatted_date)
+    assert bool(pattern.match(formatted_date)) == True
