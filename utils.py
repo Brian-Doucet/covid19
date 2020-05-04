@@ -17,7 +17,7 @@ def get_formatted_datetime(date_to_format: datetime) -> str:
     return date_to_format.strftime(datetime_format)
 
 
-def get_valid_end_date(end_date: datetime) -> bool:
+def is_valid_end_date(end_date: datetime) -> bool:
     """Check that date is prior to (or inclusive of) yesterday
 
     Arguments:
