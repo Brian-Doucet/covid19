@@ -1,7 +1,7 @@
 from datetime import datetime
 import pandas as pd
 
-from utils import get_valid_end_date, get_formatted_datetime
+from utils import is_valid_end_date, get_formatted_datetime
 
 
 def get_case_data(start, end=None, country_or_region=None):
@@ -42,7 +42,7 @@ def get_case_data(start, end=None, country_or_region=None):
 
     end_range = end or datetime.today()
 
-    if get_valid_end_date(end_range):
+    if is_valid_end_date(end_range):
         list_of_dates = [get_formatted_datetime(d) for d in pd.date_range(
             start=start, end=end_range).to_pydatetime()]
     else:
