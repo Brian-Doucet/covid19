@@ -4,7 +4,7 @@ import pandas as pd
 from utils import is_valid_end_date, get_formatted_datetime
 
 
-def get_case_data(start, end=None, country_or_region=None):
+def get_case_data(start, end=None):
     """Get global COVID-19 case reports from the Data Repository by the Center 
     for Systems Science and Engineering at Johns Hopkins University.
 
@@ -15,8 +15,6 @@ def get_case_data(start, end=None, country_or_region=None):
 
     Keyword Arguments:
         end {str} -- Date to end search on, inclusive (default: {None})
-        country_or_region {str} -- Name of a country or region to filter results (default: {None})
-
     Returns:
         pd.DataFrame -- A pandas DataFrame
 
@@ -43,27 +41,71 @@ def get_case_data(start, end=None, country_or_region=None):
     end_range = end or datetime.today()
 
     if is_valid_end_date(end_range):
-        list_of_dates = [get_formatted_datetime(d) for d in pd.date_range(
-            start=start, end=end_range).to_pydatetime()]
+        list_of_dates = [
+            get_formatted_datetime(d)
+            for d in pd.date_range(start=start, end=end_range).to_pydatetime()
+        ]
     else:
-        print(f'{end_range} is not a valid date!\n')
-        print('Please enter a date that is less than or equal to yesterday ')
+        print(f"{end_range} is not a valid date!\n")
+        print("Please enter a date that is less than or equal to yesterday ")
 
     if not list_of_dates:
-        print('No dates to search. Enter valid dates')
+        print("No dates to search. Enter valid dates")
     else:
         all_data = pd.DataFrame()
         for d in list_of_dates:
-            base_url = f'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/{d}.csv'
-            data = pd.read_csv(
-                base_url, header=0, parse_dates=['Last_Update'])
+            base_url = f"https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/{d}.csv"
+            data = pd.read_csv(base_url, header=0, parse_dates=["Last_Update"])
             all_data = pd.concat(objs=[all_data, data])
 
-        if not country_or_region:
-            return all_data
-        else:
-            return all_data[all_data['Country_Region'] == country_or_region]
+        return all_data
 
 
-test = get_case_data('04-20-2020', '04-21-2020')
-print(test.to_csv('test_file.csv', index=False))
+def filter_cases_by_country_region(df, country_or_region):
+    """Filter cases by country specified
+
+    Arguments:
+        df {pd.DataFrame} -- A pandas DataFrame
+        country {str} -- Name of country or region to filter results
+
+    Returns:
+        pd.DataFrame -- A filtered DataFrame
+    """
+
+    return df[df.Country_Region == country_or_region]
+
+
+def filter_cases_by_province_state(df, province_or_state):
+    """Filter cases by province or state specified
+
+    Arguments:
+        df {pd.DataFrame} -- A pandas DataFrame
+        country {str} -- Name of province or state to filter results
+
+    Returns:
+        pd.DataFrame -- A filtered DataFrame
+    """
+
+    return df[df.Province_State == province_or_state]
+
+
+def get_case_data_by_country(start, end, country_or_region):
+    all_cases = get_case_data(start, end)
+    filtered_cases = filter_cases_by_country_region(all_cases, country_or_region)
+
+    return filtered_cases
+
+
+def get_case_data_by_province_state(start, end, province_or_state):
+    all_cases = get_case_data(start, end)
+    filtered_cases = filter_cases_by_province_state(all_cases, province_or_state)
+
+    return filtered_cases
+
+
+test_country = get_case_data_by_country("04-20-2020", "04-21-2020", "US")
+test_province_state = get_case_data_by_province_state(
+    "04-20-2020", "04-21-2020", "New Hampshire"
+)
+print(test_country.head())
+print(test_province_state.head())
