@@ -1,0 +1,20 @@
+# Compiled Python
+*.pyc
+
+.idea
+.vscode
+
+.coverage
+*__pycache__/*
+.pytest_cache
+
+# data
+#data/*
+
+.DS_Store
+
+# Scratch code
+
+*.egg-info
+/build/
+/dist/
