@@ -23,7 +23,7 @@ def test_get_formatted_datetime_proper_format():
     assert datetime.strptime(
         formatted_date, expected_format) == expected_datetime
 
-
+# Tests to confirm valid end dates
 def test_get_valid_end_date_pass():
     valid_date = '05-01-2020'
 
