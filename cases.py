@@ -1,7 +1,7 @@
 from datetime import datetime
 import pandas as pd
 
-from utils import is_valid_end_date, get_formatted_datetime
+import utils
 
 
 def get_case_data(start, end):
@@ -37,9 +37,9 @@ def get_case_data(start, end):
         Combined        Derived; combination of [Province_State],[Country_Region].
     """
 
-    if is_valid_end_date(end):
+    if utils.is_valid_end_date(end):
         list_of_dates = [
-            get_formatted_datetime(d)
+            utils.get_formatted_datetime(d)
             for d in pd.date_range(start=start, end=end).to_pydatetime()
         ]
     else:
@@ -68,7 +68,7 @@ def filter_cases_by_country_region(df, country_or_region):
     Returns:
         pd.DataFrame -- A filtered DataFrame
     """
-
+    utils.country_region_parameter_validator(country_or_region)
     return df[df.Country_Region == country_or_region]
 
 
@@ -82,7 +82,7 @@ def filter_cases_by_province_state(df, province_or_state):
     Returns:
         pd.DataFrame -- A filtered DataFrame
     """
-
+    utils.state_parameter_validator(province_or_state)
     return df[df.Province_State == province_or_state]
 
 
@@ -98,9 +98,3 @@ def get_case_data_by_province_state(start, end, province_or_state):
     filtered_cases = filter_cases_by_province_state(all_cases, province_or_state)
 
     return filtered_cases
-
-
-# Get some sample data
-all_cases = get_case_data("04-29-2020", "04-30-2020")
-# test_country = get_case_data_by_country("04-20-2020", "US")
-print(type(all_cases.shape[1]))
