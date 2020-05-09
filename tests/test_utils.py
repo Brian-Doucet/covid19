@@ -34,3 +34,24 @@ def test_get_valid_end_date_fail():
     today = datetime.today().strftime('%m-%d-%Y')
     
     assert utils.is_valid_end_date(today) == False
+
+# Set of tests for state/province
+def test_state_parameter_validator_pass():
+    assert utils.state_parameter_validator('Massachusetts') is None
+
+def test_state_parameter_validator_fail():
+    with pytest.raises(Exception) as info:
+        utils.state_parameter_validator('The Shire')
+    
+    assert("The Shire is not valid") in str(info.value)
+
+# Set of tests for country/region
+def test_country_region_parameter_validator_pass():
+    assert utils.country_region_parameter_validator('Canada') is None
+
+def test_country_region_parameter_validator_fail():
+    with pytest.raises(Exception) as info:
+        utils.state_parameter_validator("Pandora")
+    
+    assert("Pandora is not valid") in str(info.value)
+    
