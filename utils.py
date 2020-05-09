@@ -1,6 +1,45 @@
 from datetime import datetime, timedelta
+import pandas as pd
 
 DATETIME_FORMAT = "%m-%d-%Y"
+
+
+def file_to_list(file: str, column: str) -> list:
+    file_to_df = pd.read_csv(file, usecols=[column])
+    list_of_values = file_to_df[column].tolist()
+
+    if not list_of_values:  # no data in file
+        raise Exception("File is empty")
+
+    return list_of_values
+
+
+def state_parameter_validator(state_name: str) -> bool:
+    valid_states = file_to_list("tests/state_province.csv", "state")
+    is_valid_state = state_name in valid_states
+
+    if not is_valid_state:
+        raise Exception(
+            "{} is not valid. Use one of the following values:{}".format(
+                state_name, valid_states
+            )
+        )
+    else:
+        return
+
+
+def country_region_parameter_validator(country_region: str) -> bool:
+    valid_country_region = file_to_list("tests/country_region.csv", "country_region")
+    is_valid_country_region = country_region in valid_country_region
+
+    if not is_valid_country_region:
+        raise Exception(
+            "{} is not valid. Use one of the following values:{}".format(
+                country_region, valid_country_region
+            )
+        )
+    else:
+        return
 
 
 def get_formatted_datetime(date_to_format: datetime) -> str:
