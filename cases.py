@@ -1,10 +1,10 @@
 from datetime import datetime
 import pandas as pd
 
-from utils import is_valid_end_date, get_formatted_datetime
+import utils
 
 
-def get_case_data(start, end=None):
+def get_case_data(start, end):
     """Get global COVID-19 case reports from the Data Repository by the Center 
     for Systems Science and Engineering at Johns Hopkins University.
 
@@ -12,9 +12,8 @@ def get_case_data(start, end=None):
 
     Arguments:
         start {str} -- Date to begin searching for cases
-
-    Keyword Arguments:
         end {str} -- Date to end search on, inclusive (default: {None})
+   
     Returns:
         pd.DataFrame -- A pandas DataFrame
 
@@ -38,15 +37,13 @@ def get_case_data(start, end=None):
         Combined        Derived; combination of [Province_State],[Country_Region].
     """
 
-    end_range = end or datetime.today()
-
-    if is_valid_end_date(end_range):
+    if utils.is_valid_end_date(end):
         list_of_dates = [
-            get_formatted_datetime(d)
-            for d in pd.date_range(start=start, end=end_range).to_pydatetime()
+            utils.get_formatted_datetime(d)
+            for d in pd.date_range(start=start, end=end).to_pydatetime()
         ]
     else:
-        print(f"{end_range} is not a valid date!\n")
+        print(f"{end} is not a valid date!\n")
         print("Please enter a date that is less than or equal to yesterday ")
 
     if not list_of_dates:
@@ -71,7 +68,7 @@ def filter_cases_by_country_region(df, country_or_region):
     Returns:
         pd.DataFrame -- A filtered DataFrame
     """
-
+    utils.country_region_parameter_validator(country_or_region)
     return df[df.Country_Region == country_or_region]
 
 
@@ -85,7 +82,7 @@ def filter_cases_by_province_state(df, province_or_state):
     Returns:
         pd.DataFrame -- A filtered DataFrame
     """
-
+    utils.state_parameter_validator(province_or_state)
     return df[df.Province_State == province_or_state]
 
 
@@ -101,11 +98,3 @@ def get_case_data_by_province_state(start, end, province_or_state):
     filtered_cases = filter_cases_by_province_state(all_cases, province_or_state)
 
     return filtered_cases
-
-
-test_country = get_case_data_by_country("04-20-2020", "04-21-2020", "US")
-test_province_state = get_case_data_by_province_state(
-    "04-20-2020", "04-21-2020", "New Hampshire"
-)
-print(test_country.head())
-print(test_province_state.head())
