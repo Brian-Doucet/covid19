@@ -2,7 +2,7 @@
 from datetime import datetime, timedelta
 import pytest
 import re
-import utils
+import covid19.utils as utils
 from freezegun import freeze_time
 
 # Test to confirm formatted date is a string

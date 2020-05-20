@@ -1,3 +1,0 @@
-TODO
-- Add docstrings for each function
-- Create tests (include edge cases)

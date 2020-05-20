@@ -2,7 +2,7 @@ import pandas as pd
 import pytest
 import datatest as dt
 
-import cases
+import covid19.cases as cases
 
 # Set of tests to confirm specific attributes within the raw data being returned
 def test_get_case_data_column_count():

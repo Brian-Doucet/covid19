@@ -1,10 +1,29 @@
+#!/usr/bin/env python
+
+"""Methods for validating parameters and ensuring proper formatting for dates
+"""
+
+
 from datetime import datetime, timedelta
+
 import pandas as pd
 
 DATETIME_FORMAT = "%m-%d-%Y"
 
 
 def file_to_list(file: str, column: str) -> list:
+    """Convert a column from a file into a list of values
+
+    Arguments:
+        file {str} -- file name
+        column {str} -- column to convert into a list of values
+
+    Raises:
+        Exception: If no values in column specified then file is considered empty
+
+    Returns:
+        list -- A list with all values from the column given
+    """
     file_to_df = pd.read_csv(file, usecols=[column])
     list_of_values = file_to_df[column].tolist()
 
@@ -14,8 +33,19 @@ def file_to_list(file: str, column: str) -> list:
     return list_of_values
 
 
-def state_parameter_validator(state_name: str) -> bool:
-    valid_states = file_to_list("tests/state_province.csv", "state")
+def state_parameter_validator(state_name):
+    """Check to make sure the state name is valid
+
+    Arguments:
+        state_name {str} -- State name, case sensitive
+
+    Raises:
+        Exception: If the state name is invalid or does not exist
+
+    Returns:
+        None -- If state given is valid
+    """
+    valid_states = file_to_list("covid19/data/state_province.csv", "state")
     is_valid_state = state_name in valid_states
 
     if not is_valid_state:
@@ -28,8 +58,18 @@ def state_parameter_validator(state_name: str) -> bool:
         return
 
 
-def country_region_parameter_validator(country_region: str) -> bool:
-    valid_country_region = file_to_list("tests/country_region.csv", "country_region")
+def country_region_parameter_validator(country_region):
+    """Check to make sure country or region name is valid
+
+    Arguments:
+        country_region {str} -- country/region name, case sensitive
+
+    Raises:
+        Exception: If the country/region given is invalid or does not exist
+    """
+    valid_country_region = file_to_list(
+        "covid19/data/country_region.csv", "country_region"
+    )
     is_valid_country_region = country_region in valid_country_region
 
     if not is_valid_country_region:
@@ -49,7 +89,7 @@ def get_formatted_datetime(date_to_format: datetime) -> str:
         date_to_format {datetime} -- A datetime object
 
     Returns:
-        str -- A date in the form of mm-dd-yyyy (e.g. 01-01-2020)
+        str -- A date in the format of mm-dd-yyyy (e.g. 01-01-2020)
     """
 
     return date_to_format.strftime(DATETIME_FORMAT)
