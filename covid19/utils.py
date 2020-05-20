@@ -15,9 +15,9 @@ def file_to_list(file: str) -> list:
 
     Arguments:
         file {str} -- file name
-        
+
     Raises:
-        Exception: If no values in column specified then file is considered empty
+        Exception: If no values in file passed then file is considered empty
 
     Returns:
         list -- A list with all values from the column given
