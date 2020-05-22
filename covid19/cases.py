@@ -5,14 +5,12 @@ Hopkins University GitHub repo
 """
 
 
-from datetime import datetime
-
-import pandas as pd
+import pandas as pd  # type: ignore
 
 from covid19 import utils as utils
 
 
-def get_case_data(start, end):
+def get_case_data(start: str, end: str) -> pd.DataFrame:
     """Get global COVID-19 case reports from the Data Repository by the Center 
     for Systems Science and Engineering at Johns Hopkins University.
 
@@ -21,7 +19,7 @@ def get_case_data(start, end):
     Arguments:
         start {str} -- Date to begin searching for cases
         end {str} -- Date to end search on, inclusive (default: {None})
-   
+
     Returns:
         pd.DataFrame -- A pandas DataFrame
 
@@ -65,7 +63,8 @@ def get_case_data(start, end):
         return all_data
 
 
-def filter_cases_by_country_region(df, country_or_region):
+def filter_cases_by_country_region(df: pd.DataFrame,
+                                   country_or_region: str) -> pd.DataFrame:
     """Filter cases by country specified
 
     Arguments:
@@ -79,7 +78,8 @@ def filter_cases_by_country_region(df, country_or_region):
     return df[df.Country_Region == country_or_region]
 
 
-def filter_cases_by_province_state(df, province_or_state):
+def filter_cases_by_province_state(df: pd.DataFrame,
+                                   province_or_state: str) -> pd.DataFrame:
     """Filter cases by province or state specified
 
     Arguments:
@@ -93,7 +93,8 @@ def filter_cases_by_province_state(df, province_or_state):
     return df[df.Province_State == province_or_state]
 
 
-def get_case_data_by_country(start, end, country_or_region):
+def get_case_data_by_country(start: str, end: str,
+                             country_or_region: str) -> pd.DataFrame:
     """Returns a DataFrame only for the country specified
 
     Arguments:
@@ -103,17 +104,19 @@ def get_case_data_by_country(start, end, country_or_region):
 
     Returns:
         pd.DataFrame -- A DataFrame with values for a single country/region
-    
+
     Example:
         get_case_data_by_country('04-04-2020, '04-05-2020', 'Spain')
     """
     all_cases = get_case_data(start, end)
-    filtered_cases = filter_cases_by_country_region(all_cases, country_or_region)
+    filtered_cases = filter_cases_by_country_region(
+        all_cases, country_or_region)
 
     return filtered_cases
 
 
-def get_case_data_by_province_state(start, end, province_or_state):
+def get_case_data_by_province_state(start: str, end: str,
+                                    province_or_state: str) -> pd.DataFrame:
     """Returns a DataFrame only for the province or state specified
 
     Arguments:
@@ -123,11 +126,12 @@ def get_case_data_by_province_state(start, end, province_or_state):
 
     Returns:
         pd.DataFrame -- A DataFrame with values for a single province/state
-    
+
     Example:
         get_case_data_by_province_state('04-04-2020', '04-05-2020', 'Ontario')
     """
     all_cases = get_case_data(start, end)
-    filtered_cases = filter_cases_by_province_state(all_cases, province_or_state)
+    filtered_cases = filter_cases_by_province_state(
+        all_cases, province_or_state)
 
     return filtered_cases
