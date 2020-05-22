@@ -5,9 +5,10 @@
 
 from datetime import datetime, timedelta
 
-import pandas as pd
+import pandas as pd  # type: ignore
 
-DATETIME_FORMAT = "%m-%d-%Y"
+
+DATETIME_FORMAT: str = "%m-%d-%Y"
 
 
 def file_to_list(file: str) -> list:
@@ -30,7 +31,7 @@ def file_to_list(file: str) -> list:
     return list_of_values
 
 
-def state_parameter_validator(state_name):
+def state_parameter_validator(state_name: str) -> None:
     """Check to make sure the state name is valid
 
     Arguments:
@@ -55,7 +56,7 @@ def state_parameter_validator(state_name):
         return
 
 
-def country_region_parameter_validator(country_region):
+def country_region_parameter_validator(country_region: str) -> None:
     """Check to make sure country or region name is valid
 
     Arguments:
@@ -90,14 +91,14 @@ def get_formatted_datetime(date_to_format: datetime) -> str:
     return date_to_format.strftime(DATETIME_FORMAT)
 
 
-def is_valid_end_date(end_date):
+def is_valid_end_date(end_date: str) -> bool:
     """Check that date is prior to (or inclusive of) yesterday
 
     Arguments:
         end_date {datetime} -- The date to check
 
     Returns:
-        None -- True if date entered is not greater than yesterday
+        bool -- date entered is not greater than yesterday
     """
     yesterday = datetime.today() - timedelta(days=1)
     end_date_formatted = datetime.strptime(end_date, DATETIME_FORMAT)
