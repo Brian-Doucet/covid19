@@ -46,7 +46,7 @@ def test_get_case_data_column_names_and_order():
 # Set up test data
 @pytest.fixture(scope="module")
 def test_data():
-    return pd.read_csv("tests/covid19_all_cases_04072020.csv")
+    return pd.read_csv("tests/covid19_all_cases_04072020.csv", sep=",")
 
 
 def test_filter_cases_by_country_region(test_data):

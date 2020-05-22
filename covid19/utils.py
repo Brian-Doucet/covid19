@@ -1,31 +1,29 @@
 #!/usr/bin/env python
 
-"""Methods for validating parameters and ensuring proper formatting for dates
-"""
+"""Methods for validating parameters and ensuring proper formatting for dates"""
 
 
 from datetime import datetime, timedelta
 
-import pandas as pd
-
-DATETIME_FORMAT = "%m-%d-%Y"
+import pandas as pd  # type: ignore
 
 
-def file_to_list(file: str, column: str) -> list:
+DATETIME_FORMAT: str = "%m-%d-%Y"
+
+
+def file_to_list(file: str) -> list:
     """Convert a column from a file into a list of values
 
     Arguments:
         file {str} -- file name
-        column {str} -- column to convert into a list of values
 
     Raises:
-        Exception: If no values in column specified then file is considered empty
+        Exception: If no values in file passed then file is considered empty
 
     Returns:
         list -- A list with all values from the column given
     """
-    file_to_df = pd.read_csv(file, usecols=[column])
-    list_of_values = file_to_df[column].tolist()
+    list_of_values = pd.read_csv(file, squeeze=True).tolist()
 
     if not list_of_values:  # no data in file
         raise Exception("File is empty")
@@ -33,7 +31,7 @@ def file_to_list(file: str, column: str) -> list:
     return list_of_values
 
 
-def state_parameter_validator(state_name):
+def state_parameter_validator(state_name: str) -> None:
     """Check to make sure the state name is valid
 
     Arguments:
@@ -45,7 +43,7 @@ def state_parameter_validator(state_name):
     Returns:
         None -- If state given is valid
     """
-    valid_states = file_to_list("covid19/data/state_province.csv", "state")
+    valid_states = file_to_list("covid19/data/state_province.csv")
     is_valid_state = state_name in valid_states
 
     if not is_valid_state:
@@ -58,7 +56,7 @@ def state_parameter_validator(state_name):
         return
 
 
-def country_region_parameter_validator(country_region):
+def country_region_parameter_validator(country_region: str) -> None:
     """Check to make sure country or region name is valid
 
     Arguments:
@@ -67,9 +65,7 @@ def country_region_parameter_validator(country_region):
     Raises:
         Exception: If the country/region given is invalid or does not exist
     """
-    valid_country_region = file_to_list(
-        "covid19/data/country_region.csv", "country_region"
-    )
+    valid_country_region = file_to_list("covid19/data/country_region.csv")
     is_valid_country_region = country_region in valid_country_region
 
     if not is_valid_country_region:
@@ -95,14 +91,14 @@ def get_formatted_datetime(date_to_format: datetime) -> str:
     return date_to_format.strftime(DATETIME_FORMAT)
 
 
-def is_valid_end_date(end_date: datetime) -> bool:
+def is_valid_end_date(end_date: str) -> bool:
     """Check that date is prior to (or inclusive of) yesterday
 
     Arguments:
         end_date {datetime} -- The date to check
 
     Returns:
-        bool -- True if date entered is not greater than yesterday
+        bool -- date entered is not greater than yesterday
     """
     yesterday = datetime.today() - timedelta(days=1)
     end_date_formatted = datetime.strptime(end_date, DATETIME_FORMAT)
