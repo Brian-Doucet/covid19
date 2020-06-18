@@ -1,9 +1,8 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 """Provides methods for downloading and filtering COVID-19 data from the Johns
 Hopkins University GitHub repo
 """
-
 
 import pandas as pd  # type: ignore
 
