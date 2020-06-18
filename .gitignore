@@ -21,3 +21,9 @@
 
 # ignore mypy
 *mypy*
+
+# Ignore API keys
+config.py
+
+# Jupyter notebooks
+*.ipynb*
