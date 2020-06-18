@@ -28,7 +28,7 @@ def get_weather_data(api_token: str, lat: float, lon: float, date: str) -> dict:
     url = f"https://api.darksky.net/forecast/{api_token}/{lat},{lon},{time}?exclude=currently,hourly,flags"
     response = requests.get(url)
     json_data = response.json()
-    print(response.status_code)
+
     return json_data
 
 
