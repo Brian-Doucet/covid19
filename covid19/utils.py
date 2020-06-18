@@ -104,3 +104,11 @@ def is_valid_end_date(end_date: str) -> bool:
     end_date_formatted = datetime.strptime(end_date, DATETIME_FORMAT)
 
     return end_date_formatted <= yesterday
+
+
+def get_iso_date(date):
+    """Convert a date string to ISO 8601 format"""
+
+    formatted_date = datetime.strptime(date, DATETIME_FORMAT)
+
+    return formatted_date.isoformat()
