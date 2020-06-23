@@ -6,7 +6,7 @@ Hopkins University GitHub repo
 
 import pandas as pd  # type: ignore
 
-from covid19 import utils as utils
+from covid19 import utils
 
 
 def get_case_data(start: str, end: str) -> pd.DataFrame:
