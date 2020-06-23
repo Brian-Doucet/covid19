@@ -1,16 +1,16 @@
 #!/usr/bin/env python3
 
 """Script to extract and transform weather data using the DarkSky API"""
-from typing import Optional
+
+from typing import Optional, Dict
 
 import pandas as pd
 import requests
 
-from covid19 import utils
-from covid19.config import API_KEY
+from covid19.utils import get_iso_date
 
 
-def get_weather_data(api_token: str, lat: float, lon: float, date: str) -> dict:
+def get_weather_data(api_token: str, lat: float, lon: float, date: str) -> Dict:
     """Returns historical weather conditions using the DarkSky API
 
     Args:
@@ -23,7 +23,7 @@ def get_weather_data(api_token: str, lat: float, lon: float, date: str) -> dict:
         dict: API response in JSON data format
     """
     # API requires date in ISO 8601 format
-    time = utils.get_iso_date(date)
+    time = get_iso_date(date)
 
     url = f"https://api.darksky.net/forecast/{api_token}/{lat},{lon},{time}?exclude=currently,hourly,flags"
     response = requests.get(url)
@@ -49,41 +49,43 @@ def extract_weather_data(weather_json: dict) -> Optional[pd.DataFrame]:
     daily_block = weather_json['daily'].get('data', [])
 
     if len(daily_block) > 0:
-        time = daily_block[0].get('time')
+        data = daily_block[0]
+
+        time = data.get('time')
         if not time:
             print("No value for time")
-        dew_point = daily_block[0].get('dewPoint')
+        dew_point = data.get('dewPoint')
         if not dew_point:
             print("No value for dew point")
-        humidity = daily_block[0].get('humidity')
+        humidity = data.get('humidity')
         if not humidity:
             print("No value for humidity")
-        pressure = daily_block[0].get('pressure')
+        pressure = data.get('pressure')
         if not pressure:
             print("No value for pressure")
-        ozone = daily_block[0].get('ozone')
+        ozone = data.get('ozone')
         if not ozone:
             print("No value for ozone")
-        uv_index = daily_block[0].get('uvIndex')
+        uv_index = data.get('uvIndex')
         if not uv_index:
             print("No value for uv index")
-        temp_high = daily_block[0].get('temperatureHigh')
+        temp_high = data.get('temperatureHigh')
         if not temp_high:
             print("No value for temperature high")
-        temp_low = daily_block[0].get('temperatureLow')
+        temp_low = data.get('temperatureLow')
         if not temp_low:
             print("No value for temperature low")
-        temp_max = daily_block[0].get('temperatureMax')
+        temp_max = data.get('temperatureMax')
         if not temp_max:
             print("No value for temperature max")
-        temp_min = daily_block[0].get('temperatureMin')
+        temp_min = data.get('temperatureMin')
         if not temp_min:
             print("No value for temperature min")
 
     else:
         print("No data returned for daily block")
 
-        return
+        return None
 
     list_of_values = [[
         lat, lon, tz, time,
@@ -101,20 +103,3 @@ def extract_weather_data(weather_json: dict) -> Optional[pd.DataFrame]:
                             columns=col_names)
 
     return all_data
-
-
-list_of_coordinates = [(42.768089, -78.621017), (42.36008, -71.058884)]
-
-daily_weather = pd.DataFrame()
-
-for coords in list_of_coordinates:
-    api_response = get_weather_data(
-        api_token=API_KEY,
-        lat=coords[0],
-        lon=coords[1],
-        date='05-28-2020'
-    )
-    raw_data = extract_weather_data(api_response)
-    daily_weather = pd.concat(objs=[daily_weather, raw_data])
-
-return daily_weather
