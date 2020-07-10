@@ -1,4 +1,3 @@
-
 from datetime import datetime, timedelta
 
 import pytest  # type: ignore
@@ -63,3 +62,31 @@ def test_country_region_parameter_validator_fail():
         utils.state_parameter_validator("Pandora")
 
     assert("Pandora is not valid") in str(info.value)
+
+
+def test_key_exists_in_empty_response_pass():
+    test_keys = ['lat', 'lon', 'tz', 'time',
+                 'dew_point', 'humidity', 'pressure', 'ozone',
+                 'uv_index', 'temp_high', 'temp_low', 'temp_max', 'temp_min']
+
+    test_response = {}
+    expected_output = [None] * 13
+
+    assert utils.get_multi_key_responses(
+        test_keys, test_response) == expected_output
+
+
+def test_keys_exist_in_response_pass():
+    test_keys = ['lat', 'lon', 'tz', 'time',
+                 'dew_point', 'humidity', 'pressure', 'ozone',
+                 'uv_index', 'temp_high', 'temp_low', 'temp_max', 'temp_min']
+
+    test_response = {'lat': 0.0,
+                     'dew_point': 1.0,
+                     'temp_high': 98.6,
+                     'pressure': 'low'}
+    expected_output = [0.0, None, None, None, 1.0, None, 'low',
+                       None, None, 98.6, None, None, None]
+
+    assert utils.get_multi_key_responses(
+        test_keys, test_response) == expected_output

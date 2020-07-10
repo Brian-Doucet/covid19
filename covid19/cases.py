@@ -1,13 +1,12 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 """Provides methods for downloading and filtering COVID-19 data from the Johns
 Hopkins University GitHub repo
 """
 
-
 import pandas as pd  # type: ignore
 
-from covid19 import utils as utils
+from covid19 import utils
 
 
 def get_case_data(start: str, end: str) -> pd.DataFrame:
