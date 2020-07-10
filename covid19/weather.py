@@ -7,7 +7,7 @@ from typing import Optional, Dict
 import pandas as pd
 import requests
 
-from covid19.utils import get_iso_date
+from covid19.utils import get_iso_date, get_multi_key_responses
 
 
 def get_weather_data(api_token: str, lat: float, lon: float, date: str) -> Dict:
@@ -49,57 +49,20 @@ def extract_weather_data(weather_json: dict) -> Optional[pd.DataFrame]:
     daily_block = weather_json['daily'].get('data', [])
 
     if len(daily_block) > 0:
-        data = daily_block[0]
+        data_response = daily_block[0]
+        data_fields = ['lat', 'lon', 'tz', 'time',
+                       'dew_point', 'humidity', 'pressure', 'ozone',
+                       'uv_index', 'temp_high', 'temp_low', 'temp_max', 'temp_min']
 
-        time = data.get('time')
-        if not time:
-            print("No value for time")
-        dew_point = data.get('dewPoint')
-        if not dew_point:
-            print("No value for dew point")
-        humidity = data.get('humidity')
-        if not humidity:
-            print("No value for humidity")
-        pressure = data.get('pressure')
-        if not pressure:
-            print("No value for pressure")
-        ozone = data.get('ozone')
-        if not ozone:
-            print("No value for ozone")
-        uv_index = data.get('uvIndex')
-        if not uv_index:
-            print("No value for uv index")
-        temp_high = data.get('temperatureHigh')
-        if not temp_high:
-            print("No value for temperature high")
-        temp_low = data.get('temperatureLow')
-        if not temp_low:
-            print("No value for temperature low")
-        temp_max = data.get('temperatureMax')
-        if not temp_max:
-            print("No value for temperature max")
-        temp_min = data.get('temperatureMin')
-        if not temp_min:
-            print("No value for temperature min")
+        results = [lat, lon, tz].extend(
+            get_multi_key_responses(data_fields, data_response))
+        list_of_values = [results]
+
+        all_data = pd.DataFrame(data=list_of_values,
+                                columns=data_fields)
+
+        return all_data
 
     else:
         print("No data returned for daily block")
-
         return None
-
-    list_of_values = [[
-        lat, lon, tz, time,
-        dew_point, humidity, pressure, ozone,
-        uv_index, temp_high, temp_low, temp_max, temp_min
-    ]]
-    col_names = [
-        'latitude', 'longitude', 'timezone', 'time',
-        'dew_point', 'humidity', 'pressure', 'ozone',
-        'uv_index', 'temperature_high', 'temperature_low',
-        'temperature_max', 'temperature_min'
-    ]
-
-    all_data = pd.DataFrame(data=list_of_values,
-                            columns=col_names)
-
-    return all_data

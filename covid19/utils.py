@@ -112,3 +112,26 @@ def get_iso_date(date):
     formatted_date = datetime.strptime(date, DATETIME_FORMAT)
 
     return formatted_date.isoformat()
+
+
+def get_multi_key_responses(keys, response):
+    """
+    List[Str] Dict -> List[String or Float]
+
+    Check if key exists in daily weather block
+    Pass in a list of [string]
+    Pass in a {dictionary}
+
+    Expecting a list of values that can be string or float
+    """
+
+    result_list = []
+
+    for key in keys:
+        if response.get(key) is not None:
+            result_list.append(response.get(key))
+        else:
+            result_list.append(None)
+            print(f"No value for {key}")
+
+    return result_list
